@@ -1,188 +1,57 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#008080">
-  <title>RetrOs Web 1.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetrOS Web</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <main id="desktop">
-    <div class="desktop-icons">
-      <button class="desktop-icon" data-open="computer">
-        <span class="ico">▣</span>Meu Computador
-      </button>
-      <button class="desktop-icon" data-open="files">
-        <span class="ico">📁</span>Meus Arquivos
-      </button>
-      <button class="desktop-icon" data-open="notes">
-        <span class="ico">▤</span>Bloco de Notas
-      </button>
-      <button class="desktop-icon" data-open="calculator">
-        <span class="ico">▦</span>Calculadora
-      </button>
-      <button class="desktop-icon" data-open="settings">
-        <span class="ico">⚙</span>Configurações
-      </button>
-    </div>
-
-    <section class="window hidden" data-window="computer">
-      <header class="titlebar">
-        <span>▣ Meu Computador</span>
-        <div>
-          <button data-minimize="computer">_</button>
-          <button data-close="computer">×</button>
-        </div>
-      </header>
-      <div class="window-body">
-        <h2>▣ RetrOs</h2>
-        <hr>
-        <button class="drive" data-open="files">
-          💾 Disco local (C:)
-          <small>Armazenamento virtual</small>
-        </button>
-        <hr>
-        <b>Informações do sistema</b>
-        <p>Sistema: RetrOs Web 1.0</p>
-        <p>Ambiente: Navegador</p>
-        <p>Estado: Funcionando</p>
-      </div>
-      <footer class="statusbar">Meu Computador</footer>
-    </section>
-
-    <section class="window hidden" data-window="files">
-      <header class="titlebar">
-        <span>📁 Meus Arquivos</span>
-        <div>
-          <button data-minimize="files">_</button>
-          <button data-close="files">×</button>
-        </div>
-      </header>
-      <div class="toolbar">
-        <button id="new-file">＋ Novo arquivo</button>
-        <button id="refresh-files">↻ Atualizar</button>
-      </div>
-      <div class="window-body">
-        <div id="file-list"></div>
-      </div>
-      <footer class="statusbar" id="file-status">0 objetos</footer>
-    </section>
-
-    <section class="window hidden" data-window="notes">
-      <header class="titlebar">
-        <span>▤ Bloco de Notas</span>
-        <div>
-          <button data-minimize="notes">_</button>
-          <button data-close="notes">×</button>
-        </div>
-      </header>
-      <div class="toolbar">
-        <input id="note-name" value="Anotações.txt"
-               aria-label="Nome do arquivo">
-        <button id="save-note">💾 Salvar</button>
-        <button id="clear-note">Limpar</button>
-      </div>
-      <textarea id="note-editor"
-        placeholder="Digite suas anotações aqui..."
-        spellcheck="false"></textarea>
-      <footer class="statusbar" id="note-status">Pronto</footer>
-    </section>
-
-    <section class="window hidden" data-window="calculator">
-      <header class="titlebar">
-        <span>▦ Calculadora</span>
-        <div>
-          <button data-minimize="calculator">_</button>
-          <button data-close="calculator">×</button>
-        </div>
-      </header>
-      <div class="window-body">
-        <input id="calc-display" value="0" readonly>
-        <div class="calc-grid">
-          <button data-calc="C">C</button>
-          <button data-calc="(">(</button>
-          <button data-calc=")">)</button>
-          <button data-calc="/">÷</button>
-          <button data-calc="7">7</button>
-          <button data-calc="8">8</button>
-          <button data-calc="9">9</button>
-          <button data-calc="*">×</button>
-          <button data-calc="4">4</button>
-          <button data-calc="5">5</button>
-          <button data-calc="6">6</button>
-          <button data-calc="-">−</button>
-          <button data-calc="1">1</button>
-          <button data-calc="2">2</button>
-          <button data-calc="3">3</button>
-          <button data-calc="+">+</button>
-          <button data-calc="0">0</button>
-          <button data-calc=".">.</button>
-          <button data-calc="back">⌫</button>
-          <button data-calc="=">=</button>
-        </div>
-      </div>
-      <footer class="statusbar">Calculadora</footer>
-    </section>
-
-    <section class="window hidden" data-window="settings">
-      <header class="titlebar">
-        <span>⚙ Configurações</span>
-        <div>
-          <button data-minimize="settings">_</button>
-          <button data-close="settings">×</button>
-        </div>
-      </header>
-      <div class="window-body">
-        <h3>Personalização</h3>
-        <p>Escolha a cor da área de trabalho:</p>
-        <div class="wallpapers">
-          <button data-wall="#008080">Verde-azulado</button>
-          <button data-wall="#000080">Azul clássico</button>
-          <button data-wall="#387044">Verde</button>
-          <button data-wall="#604080">Roxo</button>
-        </div>
-        <hr>
-        <h3>Sobre o RetrOs</h3>
-        <p>RetrOs Web 1.0</p>
-        <p>Um desktop retrô feito com HTML, CSS e JavaScript.</p>
-        <p>Os dados ficam salvos neste navegador.</p>
-      </div>
-      <footer class="statusbar">Configurações</footer>
-    </section>
+    <div id="desktop-icons" class="desktop-icons"></div>
+    <div id="window-layer"></div>
 
     <div id="start-menu" class="start-menu hidden">
-      <div class="start-brand">
-        <strong>RetrOs</strong>
-        <small>Web Edition</small>
+      <div class="start-heading">
+        <span class="start-logo">🖥️</span>
+        <div>
+          <strong>RetrOS</strong>
+          <small>Sistema virtual</small>
+        </div>
       </div>
-      <button data-open="computer">▣ Meu Computador</button>
-      <button data-open="files">📁 Meus Arquivos</button>
-      <button data-open="notes">▤ Bloco de Notas</button>
-      <button data-open="calculator">▦ Calculadora</button>
-      <button data-open="settings">⚙ Configurações</button>
-      <hr>
-      <button id="about-button">ⓘ Sobre o RetrOs</button>
+
+      <button data-action="open-app" data-key="computer">🖥️ Meu Computador</button>
+      <button data-action="open-app" data-key="files">📁 Meus Arquivos</button>
+      <button data-action="open-app" data-key="notes">📝 Bloco de Notas</button>
+      <button data-action="open-app" data-key="calculator">🧮 Calculadora</button>
+      <button data-action="open-app" data-key="terminal">💻 Terminal</button>
+      <button data-action="open-app" data-key="appbuilder">🧩 Criar aplicativo</button>
+      <button data-action="open-app" data-key="settings">🎨 Personalização</button>
+      <button data-action="open-app" data-key="help">📘 Manual do RetrOS</button>
+
+      <div class="start-footer">RetrOS Web • Edição experimental</div>
     </div>
 
     <div id="context-menu" class="context-menu hidden">
-      <button data-open="notes">Abrir Bloco de Notas</button>
-      <button data-open="settings">Personalizar</button>
-      <button id="context-refresh">Atualizar</button>
+      <button data-action="open-app" data-key="appbuilder">🧩 Criar aplicativo</button>
+      <button data-action="new-text">📄 Novo arquivo de texto</button>
+      <button data-action="open-app" data-key="settings">🎨 Personalizar fundo</button>
+      <button data-action="refresh-desktop">🔄 Atualizar desktop</button>
     </div>
+
+    <footer class="taskbar">
+      <button id="start-button" class="start-button" title="Menu Iniciar">
+        🪟 <span>Iniciar</span>
+      </button>
+
+      <div id="taskbar-windows"></div>
+
+      <div class="system-tray">
+        <span title="RetrOS">🖥️</span>
+        <span id="clock">00:00</span>
+      </div>
+    </footer>
   </main>
-
-  <nav id="taskbar">
-    <button id="start-button">🪟 Iniciar</button>
-    <div id="task-buttons"></div>
-    <div class="tray">
-      <span>▰</span>
-      <span id="clock">00:00</span>
-    </div>
-  </nav>
-
-  <script src="script.js"></script>
 </body>
 </html>
-
