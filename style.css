@@ -1,1 +1,406 @@
 
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 13px;
+  color: #111;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #008080;
+}
+
+button, input, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  color: #111;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #404040 #404040 #fff;
+  border-radius: 0;
+  padding: 5px 9px;
+}
+
+button:active {
+  border-color: #404040 #fff #fff #404040;
+}
+
+button:focus-visible {
+  outline: 1px dotted #000;
+}
+
+#desktop {
+  position: fixed;
+  inset: 0 0 34px;
+  overflow: hidden;
+  background: #008080;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.desktop-icons {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 95px;
+}
+
+.desktop-icon {
+  min-height: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  color: white;
+  border: 1px solid transparent;
+  text-shadow: 1px 1px #222;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.desktop-icon:hover {
+  background: rgba(0, 0, 128, .35);
+  border: 1px dotted white;
+}
+
+.ico {
+  font-size: 30px;
+  line-height: 35px;
+}
+
+.window {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(580px, calc(100vw - 115px));
+  height: min(420px, calc(100% - 20px));
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #303030 #303030 #fff;
+  box-shadow: 1px 1px #000;
+}
+
+.titlebar {
+  height: 27px;
+  flex-shrink: 0;
+  margin: 2px 2px 0;
+  padding: 3px 5px;
+  color: white;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  cursor: move;
+  user-select: none;
+}
+
+.titlebar button {
+  height: 20px;
+  width: 22px;
+  padding: 0;
+  line-height: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.window-body {
+  padding: 12px;
+  overflow: auto;
+  flex: 1;
+}
+
+.statusbar {
+  min-height: 23px;
+  flex-shrink: 0;
+  margin: 0 3px 3px;
+  padding: 4px 6px;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  color: #333;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid #888;
+  flex-wrap: wrap;
+}
+
+#note-name {
+  min-width: 100px;
+  flex: 1;
+  padding: 5px;
+  border: 2px inset #ddd;
+}
+
+#note-editor {
+  display: block;
+  width: calc(100% - 8px);
+  flex: 1;
+  min-height: 0;
+  margin: 4px;
+  padding: 8px;
+  resize: none;
+  border: 2px inset #ddd;
+  background: white;
+  font: 14px "Courier New", monospace;
+}
+
+.drive {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  margin: 12px 0;
+  text-align: left;
+}
+
+.drive small {
+  display: block;
+}
+
+#file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.file-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.file-row:hover {
+  background: #000080;
+  color: white;
+}
+
+.file-type {
+  opacity: .75;
+}
+
+.empty-files {
+  padding: 15px;
+  color: #555;
+}
+
+#calc-display {
+  width: 100%;
+  height: 44px;
+  margin-bottom: 10px;
+  padding: 5px;
+  text-align: right;
+  font: 24px "Courier New", monospace;
+  border: 2px inset #ddd;
+  background: white;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.calc-grid button {
+  height: 42px;
+  font-size: 16px;
+}
+
+.wallpapers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wallpapers button:nth-child(1) {
+  background: #008080;
+  color: white;
+}
+
+.wallpapers button:nth-child(2) {
+  background: #000080;
+  color: white;
+}
+
+.wallpapers button:nth-child(3) {
+  background: #387044;
+  color: white;
+}
+
+.wallpapers button:nth-child(4) {
+  background: #604080;
+  color: white;
+}
+
+#taskbar {
+  position: fixed;
+  z-index: 10000;
+  inset: auto 0 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px;
+  background: #c0c0c0;
+  border-top: 2px solid white;
+  box-shadow: 0 -1px #777;
+}
+
+#start-button {
+  height: 27px;
+  font-weight: bold;
+}
+
+#task-buttons {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.task-button {
+  height: 26px;
+  min-width: 65px;
+  max-width: 170px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.task-button.active {
+  border-color: #404040 #fff #fff #404040;
+  background: #aaa;
+}
+
+.tray {
+  height: 26px;
+  min-width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 6px;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.start-menu {
+  position: fixed;
+  z-index: 9999;
+  bottom: 34px;
+  left: 3px;
+  width: 235px;
+  padding: 4px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #303030 #303030 #fff;
+  box-shadow: 1px 1px #000;
+}
+
+.start-brand {
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  color: white;
+  background: linear-gradient(135deg, #000080, #1084d0);
+}
+
+.start-brand strong {
+  font-size: 22px;
+  font-style: italic;
+}
+
+.start-brand small {
+  margin-top: 3px;
+}
+
+.start-menu > button:not(#about-button) {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.start-menu > button:hover {
+  background: #000080;
+  color: white;
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 11000;
+  width: 210px;
+  padding: 3px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #333 #333 #fff;
+  box-shadow: 1px 1px #000;
+}
+
+.context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.context-menu button:hover {
+  background: #000080;
+  color: white;
+}
+
+@media (max-width: 560px) {
+  .window {
+    left: 5px;
+    right: 5px;
+    top: 8px;
+    transform: none;
+    width: auto;
+    height: calc(100% - 16px);
+  }
+
+  .desktop-icons {
+    left: 2px;
+    top: 5px;
+  }
+
+  .task-button {
+    min-width: 40px;
+    max-width: 90px;
+    font-size: 11px;
+  }
+}
+
