@@ -88,39 +88,96 @@ const googleAppContent = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google - RetrOS</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 24px 14px; color: #202124; background: #fff; font-family: Arial, sans-serif; text-align: center; }
-    .google { max-width: 620px; margin: 0 auto; padding-top: 22px; }
-    .logo { font-size: clamp(48px, 10vw, 72px); font-weight: 600; letter-spacing: -4px; margin: 25px 0 32px; }
-    form { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
-    input { width: 100%; max-width: 480px; padding: 14px 18px; border: 1px solid #dfe1e5; border-radius: 28px; font-size: 16px; outline: none; }
-    input:hover, input:focus { box-shadow: 0 1px 6px #20212435; border-color: #dfe1e5; }
-    button, .shortcut { display: inline-block; padding: 11px 16px; border: 1px solid transparent; border-radius: 5px; background: #f8f9fa; color: #202124; font-size: 14px; text-decoration: none; cursor: pointer; }
-    button:hover, .shortcut:hover { border-color: #dadce0; box-shadow: 0 1px 1px #0001; }
-    .buttons { margin-top: 20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
-    .shortcuts { margin-top: 30px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-    .note { color: #70757a; font-size: 12px; margin-top: 30px; line-height: 1.5; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: white;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    form {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 11px;
+      border: 1px solid #aaa;
+      border-radius: 22px;
+      outline-color: #4285f4;
+    }
+    button {
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 20px;
+      background: #4285f4;
+      color: white;
+      cursor: pointer;
+    }
+    iframe {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      background: white;
+    }
+    #status {
+      padding: 7px 10px;
+      font-size: 12px;
+      color: #555;
+    }
   </style>
 </head>
 <body>
-  <main class="google">
-    <div class="logo"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span></div>
-    <form action="https://www.google.com/search" method="GET" target="_blank">
-      <input name="q" type="search" placeholder="Pesquisar no Google..." aria-label="Pesquisar no Google" required>
-      <div class="buttons"><button type="submit">Pesquisa Google</button></div>
-    </form>
-    <div class="shortcuts">
-      <a class="shortcut" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">▶ YouTube</a>
-      <a class="shortcut" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">✉ Gmail</a>
-      <a class="shortcut" href="https://maps.google.com/" target="_blank" rel="noopener noreferrer">🗺 Google Maps</a>
-    </div>
-    <p class="note">Google real · A pesquisa abre em uma nova aba do navegador.</p>
-  </main>
+  <form id="searchForm">
+    <input id="query" type="search"
+      placeholder="Pesquisar no Google..."
+      aria-label="Pesquisar no Google" required>
+    <button type="submit">Pesquisar</button>
+  </form>
+
+  <div id="status">Conectando ao Google...</div>
+
+  <iframe id="results"
+    title="Google"
+    referrerpolicy="strict-origin-when-cross-origin"
+    src="https://www.google.com/webhp?igu=1">
+  </iframe>
+
+  <script>
+    const frame = document.getElementById("results");
+    const status = document.getElementById("status");
+
+    document.getElementById("searchForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const query = document.getElementById("query").value.trim();
+      if (!query) return;
+
+      frame.src =
+        "https://www.google.com/search?igu=1&q=" +
+        encodeURIComponent(query);
+
+      status.textContent = "Pesquisa: " + query;
+    });
+
+    frame.addEventListener("load", () => {
+      status.textContent = "Página carregada. Se aparecer um bloqueio, use a alternativa externa.";
+    });
+  <\/script>
 </body>
 </html>`;
+
 
 const manualContent = `COMO USAR ARQUIVOS .APP
 
