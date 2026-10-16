@@ -1,46 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#176b87">
-  <title>RetrOS</title>
+  <title>RetrOS Web</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <main id="desktop">
-    <header class="desktop-header">
-      <div class="system-logo">R</div>
-      <div>
-        <strong>RetrOS</strong>
-        <div class="subtitle">Web Operating System</div>
+    <div id="desktop-icons" class="desktop-icons"></div>
+    <div id="window-layer"></div>
+
+    <div id="start-menu" class="start-menu hidden">
+      <div class="start-heading">
+        <span class="start-logo">🖥️</span>
+        <div>
+          <strong>RetrOS</strong>
+          <small>Sistema virtual</small>
+        </div>
       </div>
-    </header>
 
-    <section id="desktop-icons" aria-label="Aplicativos do desktop"></section>
-    <section id="window-layer"></section>
+      <button data-action="open-app" data-key="computer">🖥️ Meu Computador</button>
+      <button data-action="open-app" data-key="googleapp">🌐 Google.app</button>
+      <button data-action="open-app" data-key="files">📁 Meus Arquivos</button>
+      <button data-action="open-app" data-key="notes">📝 Bloco de Notas</button>
+      <button data-action="open-app" data-key="calculator">🧮 Calculadora</button>
+      <button data-action="open-app" data-key="terminal">💻 Terminal</button>
+      <button data-action="open-app" data-key="appbuilder">🧩 Criar aplicativo</button>
+      <button data-action="open-app" data-key="settings">🎨 Personalização</button>
+      <button data-action="open-app" data-key="help">📘 Manual do RetrOS</button>
 
-    <nav id="start-menu" class="hidden" aria-label="Menu Iniciar">
-      <div class="start-title">RetrOS</div>
-      <input id="start-search" type="search" placeholder="Pesquisar aplicativos...">
-      <div id="start-apps"></div>
-      <button id="start-power" class="menu-app">⏻ Desligar sessão</button>
-    </nav>
+      <div class="start-footer">RetrOS Web • Edição experimental</div>
+    </div>
 
     <div id="context-menu" class="context-menu hidden">
-      <button data-action="refresh">↻ Atualizar desktop</button>
-      <button data-action="open-app" data-key="google">🌐 Google</button>
-      <button data-action="open-app" data-key="files">📁 Meus Arquivos</button>
-      <button data-action="open-app" data-key="creator">🧩 Criar aplicativo</button>
+      <button data-action="open-app" data-key="googleapp">🌐 Abrir Google.app</button>
+      <button data-action="open-app" data-key="appbuilder">🧩 Criar aplicativo</button>
+      <button data-action="new-text">📄 Novo arquivo de texto</button>
+      <button data-action="open-app" data-key="settings">🎨 Personalizar fundo</button>
+      <button data-action="refresh-desktop">🔄 Atualizar desktop</button>
     </div>
 
     <footer class="taskbar">
-      <button id="start-button" title="Menu Iniciar">⊞</button>
+      <button id="start-button" class="start-button" title="Menu Iniciar">
+        🪟 <span>Iniciar</span>
+      </button>
+
       <div id="taskbar-windows"></div>
-      <div class="taskbar-status">
-        <span title="Conectividade">🌐</span>
+
+      <div class="system-tray">
+        <span title="RetrOS">🖥️</span>
         <span id="clock">00:00</span>
       </div>
     </footer>
