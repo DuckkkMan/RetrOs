@@ -1,4 +1,3 @@
-
 "use strict";
 
 // =============================================
@@ -35,7 +34,12 @@ function makeId() {
   return "f" + Date.now().toString(36) +
     Math.random().toString(36).slice(2, 8);
 }
+```[cite: 1]
 
+---
+
+### 2. Modelos de Aplicativos Padrão e Conteúdos do Sistema
+```javascript
 const appCodeTemplate = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -85,6 +89,44 @@ const appCodeTemplate = `<!DOCTYPE html>
 </body>
 </html>`;
 
+const googleAppContent = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px 14px; color: #202124; background: #fff; font-family: Arial, sans-serif; text-align: center; }
+    .google { max-width: 620px; margin: 0 auto; padding-top: 22px; }
+    .logo { font-size: clamp(48px, 10vw, 72px); font-weight: 600; letter-spacing: -4px; margin: 25px 0 32px; }
+    form { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+    input { width: 100%; max-width: 480px; padding: 14px 18px; border: 1px solid #dfe1e5; border-radius: 28px; font-size: 16px; outline: none; }
+    input:hover, input:focus { box-shadow: 0 1px 6px #20212435; border-color: #dfe1e5; }
+    button, .shortcut { display: inline-block; padding: 11px 16px; border: 1px solid transparent; border-radius: 5px; background: #f8f9fa; color: #202124; font-size: 14px; text-decoration: none; cursor: pointer; }
+    button:hover, .shortcut:hover { border-color: #dadce0; box-shadow: 0 1px 1px #0001; }
+    .buttons { margin-top: 20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+    .shortcuts { margin-top: 30px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .note { color: #70757a; font-size: 12px; margin-top: 30px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main class="google">
+    <div class="logo"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span></div>
+    <form action="https://www.google.com/search" method="GET" target="_blank">
+      <input name="q" type="search" placeholder="Pesquisar no Google..." aria-label="Pesquisar no Google" required>
+      <div class="buttons"><button type="submit">Pesquisa Google</button></div>
+    </form>
+    <div class="shortcuts">
+      <a class="shortcut" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">▶ YouTube</a>
+      <a class="shortcut" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">✉ Gmail</a>
+      <a class="shortcut" href="https://maps.google.com/" target="_blank" rel="noopener noreferrer">🗺 Google Maps</a>
+    </div>
+    <p class="note">Google real · A pesquisa abre em uma nova aba do navegador.</p>
+  </main>
+</body>
+</html>`;
+
 const manualContent = `COMO USAR ARQUIVOS .APP
 
 Um arquivo .app é um aplicativo virtual do RetrOS.
@@ -127,7 +169,12 @@ ATENÇÃO:
 Os arquivos .exe deste sistema são simulações, não executáveis
 reais do Windows. Código .app é executado no navegador, em uma área
 isolada, mas não deve ser usado para abrir código desconhecido.`;
+```[cite: 1]
 
+---
+
+### 3. Gestão de Ficheiros e Armazenamento Local
+```javascript
 function createDefaultFiles() {
   return [
     {
@@ -211,15 +258,28 @@ function ensureSystemFiles() {
     });
   }
 
+  if (!files.some(file => file.name.toLowerCase() === "google.app")) {
+    files.push({
+      id: makeId(),
+      name: "Google.app",
+      type: "app",
+      icon: "🌐",
+      description: "Acesse a pesquisa real do Google.",
+      content: googleAppContent,
+      system: true
+    });
+  }
+
   saveFiles();
 }
 
 ensureSystemFiles();
+```[cite: 1]
 
-// =============================================
-// PAPEL DE PAREDE
-// =============================================
+---
 
+### 4. Gestão de Fundo de Ecrã (Papel de Parede)
+```javascript
 function setDefaultBackground(save = false) {
   if (save) {
     try {
@@ -260,21 +320,14 @@ function setBackgroundColor(color, save = true) {
 
   if (save) {
     try {
-      localStorage.setItem(
-        BG_KEY,
-        JSON.stringify({ type: "color", value: color })
-      );
+      localStorage.setItem(BG_KEY, JSON.stringify({ type: "color", value: color }));
     } catch (_) {}
   }
 }
 
 function setBackgroundImage(dataURL) {
   try {
-    localStorage.setItem(
-      BG_KEY,
-      JSON.stringify({ type: "image", value: dataURL })
-    );
-
+    localStorage.setItem(BG_KEY, JSON.stringify({ type: "image", value: dataURL }));
     desktop.style.backgroundImage = `url("${dataURL}")`;
     desktop.style.backgroundPosition = "center";
     desktop.style.backgroundSize = "cover";
@@ -305,14 +358,14 @@ function applySavedBackground() {
 }
 
 applySavedBackground();
+```[cite: 1]
 
-// =============================================
-// ÍCONES DO DESKTOP
-// =============================================
+---
 
+### 5. Ícones do Desktop e Gestão de Janelas
+```javascript
 const desktopApps = [
   { key: "computer", icon: "🖥️", name: "Meu Computador" },
-  { key: "browser", icon: "🌐", name: "Google / Internet" },
   { key: "files", icon: "📁", name: "Meus Arquivos" },
   { key: "notes", icon: "📝", name: "Bloco de Notas" },
   { key: "calculator", icon: "🧮", name: "Calculadora" },
@@ -326,11 +379,7 @@ const desktopApps = [
 function renderDesktopIcons() {
   const customApps = files
     .filter(file => file.type === "app")
-    .map(file => ({
-      fileId: file.id,
-      icon: file.icon || "🧩",
-      name: file.name
-    }));
+    .map(file => ({ fileId: file.id, icon: file.icon || "🧩", name: file.name }));
 
   desktopIcons.innerHTML = [
     ...desktopApps.map(app => `
@@ -352,14 +401,9 @@ function renderDesktopIcons() {
 
 renderDesktopIcons();
 
-// =============================================
-// JANELAS
-// =============================================
-
 function createWindow(title, icon, content, appKey, width = 620) {
   const id = "window-" + (++windowCounter);
   const win = document.createElement("section");
-
   win.className = "window";
   win.dataset.windowId = id;
   win.style.width = `min(${width}px, calc(100vw - 24px))`;
@@ -367,10 +411,7 @@ function createWindow(title, icon, content, appKey, width = 620) {
 
   win.innerHTML = `
     <div class="titlebar">
-      <div class="titlebar-name">
-        <span>${escapeHTML(icon)}</span>
-        <span>${escapeHTML(title)}</span>
-      </div>
+      <div class="titlebar-name"><span>${escapeHTML(icon)}</span><span>${escapeHTML(title)}</span></div>
       <div class="window-controls">
         <button data-action="minimize-window" data-window-id="${id}" title="Minimizar">—</button>
         <button data-action="maximize-window" data-window-id="${id}" title="Maximizar">□</button>
@@ -391,16 +432,13 @@ function createWindow(title, icon, content, appKey, width = 620) {
 
   windows.set(id, { element: win, taskButton, appKey });
   focusWindow(id);
-
   return id;
 }
 
 function focusWindow(id) {
   const entry = windows.get(id);
   if (!entry) return;
-
   entry.element.style.zIndex = ++zIndex;
-
   for (const [otherId, other] of windows) {
     other.taskButton.classList.toggle("active", otherId === id);
   }
@@ -409,7 +447,6 @@ function focusWindow(id) {
 function closeWindow(id) {
   const entry = windows.get(id);
   if (!entry) return;
-
   entry.element.remove();
   entry.taskButton.remove();
   windows.delete(id);
@@ -418,7 +455,6 @@ function closeWindow(id) {
 function minimizeWindow(id) {
   const entry = windows.get(id);
   if (!entry) return;
-
   entry.element.style.display = "none";
   entry.taskButton.classList.remove("active");
 }
@@ -426,7 +462,6 @@ function minimizeWindow(id) {
 function toggleWindow(id) {
   const entry = windows.get(id);
   if (!entry) return;
-
   if (entry.element.style.display === "none") {
     entry.element.style.display = "flex";
     focusWindow(id);
@@ -434,7 +469,12 @@ function toggleWindow(id) {
     minimizeWindow(id);
   }
 }
+```[cite: 1]
 
+---
+
+### 6. Inicialização de Aplicativos e Sistema de Ficheiros
+```javascript
 function refreshOpenFileWindows() {
   for (const [, entry] of windows) {
     if (entry.appKey === "files") {
@@ -443,10 +483,6 @@ function refreshOpenFileWindows() {
     }
   }
 }
-
-// =============================================
-// ABRIR APLICATIVOS
-// =============================================
 
 function openApp(key, options = {}) {
   startMenu.classList.add("hidden");
@@ -474,9 +510,12 @@ function openApp(key, options = {}) {
       createWindow("Meus Arquivos", "📁", renderFilesHTML(), key, 700);
       break;
 
-    // =========================================
-    // GOOGLE / INTERNET - PESQUISA REAL
-    // =========================================
+    case "googleapp": {
+      const googleApp = files.find(file => file.name.toLowerCase() === "google.app");
+      if (googleApp) openFile(googleApp.id);
+      else alert("Google.app não encontrado.");
+      break;
+    }
 
     case "browser":
       createWindow("Google / Internet", "🌐", `
@@ -487,29 +526,22 @@ function openApp(key, options = {}) {
             </div>
             <p class="muted">Pesquisa real do Google, dentro do RetrOS</p>
           </div>
-
           <form class="browser-search-form" style="display:flex;gap:8px;flex-wrap:wrap;">
             <input name="query" type="search" placeholder="Pesquisar no Google..." aria-label="Pesquisar no Google" required style="flex:1;min-width:180px;padding:11px 13px;border:1px solid #aaa;border-radius:22px;font:inherit;">
             <button class="retro-button" type="submit">🔎 Pesquisar</button>
           </form>
-
           <div class="button-row" style="justify-content:center;flex-wrap:wrap;">
             <button class="retro-button" type="button" data-action="browser-quick" data-url="https://mail.google.com/">✉️ Gmail</button>
             <button class="retro-button" type="button" data-action="browser-quick" data-url="https://www.youtube.com/">▶️ YouTube</button>
             <button class="retro-button" type="button" data-action="browser-quick" data-url="https://maps.google.com/">🗺️ Google Maps</button>
           </div>
-
           <hr>
-
           <h3 style="margin:0;">Abrir um endereço</h3>
-
           <form class="browser-url-form" style="display:flex;gap:8px;flex-wrap:wrap;">
             <input name="url" type="text" placeholder="https://exemplo.com" aria-label="Endereço do site" required style="flex:1;min-width:180px;padding:10px;border:1px solid #aaa;border-radius:6px;font:inherit;">
             <button class="retro-button" type="submit">🌐 Abrir em nova aba</button>
           </form>
-
           <p class="muted" style="margin:0;">O Google e os sites abrem de verdade em uma nova aba do navegador. Alguns sites bloqueiam a exibição dentro de outra página, por isso a abertura externa é a opção mais compatível.</p>
-
           <div style="border:1px solid #aaa;border-radius:8px;padding:12px;background:var(--panel-bg, #f5f5f5);">
             <strong>Como funciona?</strong>
             <p style="margin:6px 0 0;">As pesquisas são enviadas diretamente para <code>google.com/search</code>. O RetrOS não simula os resultados nem precisa de uma API de pesquisa.</p>
@@ -578,7 +610,7 @@ function openApp(key, options = {}) {
             <input type="text" name="appDescription" placeholder="O que este app faz?" maxlength="180">
           </label>
           <label class="form-field">Código HTML, CSS e JavaScript
-            <textarea name="appContent" class="app-code-editor" rows="13" spellcheck="false">${escapeHTML(appCodeTemplate)}</textarea>
+            <textarea name="appContent" class="app-code-editor" rows="13" spellcheck="false" required>${escapeHTML(appCodeTemplate)}</textarea>
           </label>
           <div class="button-row">
             <button class="retro-button" type="button" data-action="reset-app-template">↩️ Restaurar exemplo</button>
@@ -608,11 +640,12 @@ function openApp(key, options = {}) {
       alert("Esse aplicativo não existe.");
   }
 }
+```[cite: 1]
 
-// =============================================
-// MEUS ARQUIVOS
-// =============================================
+---
 
+### 7. Gestão de Ficheiros ("Meus Arquivos" e Bloco de Notas)
+```javascript
 function fileIcon(file) {
   if (file.type === "app") return file.icon || "🧩";
   if (file.type === "exe") return "👾";
@@ -631,15 +664,12 @@ function renderFilesHTML() {
         <div class="file-row">
           <div class="file-main">
             <span class="file-emoji">${escapeHTML(fileIcon(file))}</span>
-            <div class="file-details">
-              <strong>${escapeHTML(file.name)}</strong>
-              <small>${escapeHTML(file.type.toUpperCase())}</small>
-            </div>
+            <div class="file-details"><strong>${escapeHTML(file.name)}</strong><small>${escapeHTML(file.type.toUpperCase())}</small></div>
           </div>
           <div class="file-actions">
             <button class="file-button" data-action="open-file" data-file-id="${escapeHTML(file.id)}">Abrir</button>
-            <button class="file-button" data-action="rename-file" data-file-id="${escapeHTML(file.id)}">Renomear</button>
-            <button class="file-button" data-action="delete-file" data-file-id="${escapeHTML(file.id)}">Excluir</button>
+            ${file.system ? "" : `<button class="file-button" data-action="rename-file" data-file-id="${escapeHTML(file.id)}">Renomear</button>`}
+            ${file.system ? "" : `<button class="file-button" data-action="delete-file" data-file-id="${escapeHTML(file.id)}">Excluir</button>`}
           </div>
         </div>
       `).join("") : `<div class="empty-state">Nenhum arquivo encontrado.</div>`}
@@ -650,7 +680,6 @@ function renderFilesHTML() {
 
 function openFile(id) {
   const file = files.find(item => item.id === id);
-
   if (!file) {
     alert("Arquivo não encontrado.");
     return;
@@ -686,10 +715,8 @@ function openNotes(fileId = null) {
 function newTextFile() {
   const name = prompt("Nome do arquivo:", "Novo arquivo.txt");
   if (!name || !name.trim()) return;
-
   let finalName = name.trim();
   if (!finalName.toLowerCase().endsWith(".txt")) finalName += ".txt";
-
   files.push({ id: makeId(), name: finalName, type: "txt", content: "" });
   saveFiles();
   refreshOpenFileWindows();
@@ -699,10 +726,8 @@ function newTextFile() {
 function renameFile(id) {
   const file = files.find(item => item.id === id);
   if (!file) return;
-
   const name = prompt("Novo nome:", file.name);
   if (!name || !name.trim()) return;
-
   file.name = name.trim();
   saveFiles();
   refreshOpenFileWindows();
@@ -712,9 +737,7 @@ function renameFile(id) {
 function deleteFile(id) {
   const file = files.find(item => item.id === id);
   if (!file) return;
-
   if (!confirm(`Excluir "${file.name}"?`)) return;
-
   files = files.filter(item => item.id !== id);
   saveFiles();
   refreshOpenFileWindows();
@@ -725,14 +748,12 @@ function saveNote(button) {
   const win = button.closest(".window");
   const editor = win?.querySelector(".note-editor");
   if (!editor) return;
-
   const content = editor.querySelector(".note-textarea").value;
   const fileId = editor.dataset.fileId;
 
   if (fileId) {
     const file = files.find(item => item.id === fileId);
     if (!file) return alert("O arquivo não existe mais.");
-
     file.content = content;
     saveFiles();
     refreshOpenFileWindows();
@@ -751,46 +772,34 @@ function saveNoteAs(button) {
   const win = button.closest(".window");
   const editor = win?.querySelector(".note-editor");
   if (!editor) return;
-
   const name = prompt("Nome do arquivo:", "Minha nota.txt");
   if (!name || !name.trim()) return;
-
   let finalName = name.trim();
   if (!finalName.toLowerCase().endsWith(".txt")) finalName += ".txt";
-
-  files.push({
-    id: makeId(),
-    name: finalName,
-    type: "txt",
-    content: editor.querySelector(".note-textarea").value
-  });
-
+  files.push({ id: makeId(), name: finalName, type: "txt", content: editor.querySelector(".note-textarea").value });
   saveFiles();
   refreshOpenFileWindows();
   renderDesktopIcons();
   alert("Arquivo criado!");
 }
+```[cite: 1]
 
-// =============================================
-// APLICATIVOS .APP EXECUTÁVEIS
-// =============================================
+---
 
+### 8. Motor de Execução de Aplicativos de Utilizador (`.app`)
+```javascript
 function prepareAppDocument(content) {
   const source = String(content || "");
-
   if (!/<\s*[a-z!/?][^>]*>/i.test(source)) {
     return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:Arial,sans-serif;padding:20px;white-space:pre-wrap;overflow-wrap:anywhere;color:#202938}</style></head><body>${escapeHTML(source || "Aplicativo vazio. Clique em Editar código para começar.")}</body></html>`;
   }
-
   return source;
 }
 
 function runAppPreview(editor) {
   if (!editor) return;
-
   const code = editor.querySelector(".app-content")?.value ?? "";
   const frame = editor.querySelector(".app-preview");
-
   if (!frame) return;
 
   frame.srcdoc = prepareAppDocument(code);
@@ -798,14 +807,12 @@ function runAppPreview(editor) {
 
 function openUserApp(fileId) {
   const file = files.find(item => item.id === fileId);
-
   if (!file || file.type !== "app") {
     alert("Aplicativo não encontrado.");
     return;
   }
 
   const code = file.content || appCodeTemplate;
-
   const id = createWindow(file.name, file.icon || "🧩", `
     <div class="app-editor" data-file-id="${escapeHTML(file.id)}" style="display:flex;flex-direction:column;gap:10px;min-height:360px;">
       <div class="app-toolbar" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
@@ -815,13 +822,10 @@ function openUserApp(fileId) {
           <button class="retro-button" data-action="save-app-content">💾 Salvar código</button>
         </div>
       </div>
-
-      <iframe class="app-preview" title="Aplicativo ${escapeHTML(file.name)}" sandbox="allow-scripts" referrerpolicy="no-referrer" style="width:100%;height:300px;flex:0 0 300px;border:1px solid #aab4c0;border-radius:8px;background:white;"></iframe>
-
+      <iframe class="app-preview" title="Aplicativo ${escapeHTML(file.name)}" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" style="width:100%;height:300px;flex:0 0 300px;border:1px solid #aab4c0;border-radius:8px;background:white;"></iframe>
       <label class="form-field">Código HTML, CSS e JavaScript
         <textarea class="app-content app-code-editor" spellcheck="false" rows="12" style="font-family:Consolas,monospace;white-space:pre;tab-size:2;">${escapeHTML(code)}</textarea>
       </label>
-
       <p class="muted">Edite o código e clique em Executar para testar. Clique em Salvar código para guardar as alterações.</p>
     </div>
   `, "userapp", 780);
@@ -834,14 +838,11 @@ function openUserApp(fileId) {
 function saveAppContent(button) {
   const editor = button.closest(".app-editor");
   if (!editor) return;
-
   const file = files.find(item => item.id === editor.dataset.fileId);
   if (!file) return alert("Aplicativo não encontrado.");
 
   file.content = editor.querySelector(".app-content").value;
-
   if (!saveFiles()) return;
-
   alert("Código do aplicativo salvo!");
 }
 
@@ -853,7 +854,6 @@ function createUserApp(form) {
 
   let name = nameInput.value.trim();
   const icon = iconInput.value.trim() || "🧩";
-
   if (!name) return alert("Digite o nome do aplicativo.");
   if (!name.toLowerCase().endsWith(".app")) name += ".app";
 
@@ -872,7 +872,6 @@ function createUserApp(form) {
   };
 
   files.push(app);
-
   if (!saveFiles()) {
     files = files.filter(file => file.id !== app.id);
     return;
@@ -880,62 +879,43 @@ function createUserApp(form) {
 
   renderDesktopIcons();
   refreshOpenFileWindows();
-
   const win = form.closest(".window");
   if (win) closeWindow(win.dataset.windowId);
-
   openUserApp(app.id);
 }
+```[cite: 1]
 
-// =============================================
-// CALCULADORA
-// =============================================
+---
 
+### 9. Calculadora e Terminal de Comandos
+```javascript
 function calculateExpression(expression) {
   const cleaned = expression.trim();
   if (!cleaned) return "0";
-
-  if (!/^[0-9+\-*/().%\s]+$/.test(cleaned)) {
-    throw new Error("Expressão inválida.");
-  }
-
+  if (!/^[0-9+\-*/().%\s]+$/.test(cleaned)) throw new Error("Expressão inválida.");
   const result = Function('"use strict"; return (' + cleaned + ')')();
-
-  if (typeof result !== "number" || !Number.isFinite(result)) {
-    throw new Error("Resultado inválido.");
-  }
-
+  if (typeof result !== "number" || !Number.isFinite(result)) throw new Error("Resultado inválido.");
   return String(Number(result.toPrecision(12)));
 }
 
 function handleCalculator(action, value, button) {
   const display = button.closest(".window")?.querySelector("[data-calc-display]");
   if (!display) return;
-
   if (action === "calc-clear" || value === "C") {
     display.value = "0";
     return;
   }
-
   if (value === "=") {
-    try {
-      display.value = calculateExpression(display.value);
-    } catch (_) {
-      display.value = "Erro";
-    }
+    try { display.value = calculateExpression(display.value); }
+    catch (_) { display.value = "Erro"; }
     return;
   }
-
   if (display.value === "0" || display.value === "Erro") {
     display.value = /^[0-9.(]$/.test(value) ? value : display.value + value;
   } else {
     display.value += value;
   }
 }
-
-// =============================================
-// TERMINAL
-// =============================================
 
 function terminalWrite(output, text = "") {
   const line = document.createElement("div");
@@ -967,17 +947,13 @@ function terminalHelp() {
 
 function findFileByName(name) {
   const normalized = name.toLowerCase().trim();
-
   return files.find(file => file.name.toLowerCase() === normalized) ||
-    files.find(file =>
-      file.name.toLowerCase().replace(/\.(txt|app|exe)$/i, "") === normalized
-    );
+    files.find(file => file.name.toLowerCase().replace(/\.(txt|app|exe)$/i, "") === normalized);
 }
 
 function runTerminalCommand(raw, output) {
   const commandLine = raw.trim();
   if (!commandLine) return;
-
   terminalWrite(output, "retrOS> " + commandLine);
 
   const parts = commandLine.split(/\s+/);
@@ -986,140 +962,63 @@ function runTerminalCommand(raw, output) {
   const rest = args.join(" ");
 
   switch (command) {
-    case "help":
-      terminalWrite(output, terminalHelp());
-      break;
-
-    case "clear":
-      output.innerHTML = "";
-      break;
-
+    case "help": terminalWrite(output, terminalHelp()); break;
+    case "clear": output.innerHTML = ""; break;
     case "ls":
     case "dir":
-      terminalWrite(
-        output,
-        files.map(file => `${fileIcon(file)} ${file.name}`).join("\n") || "Nenhum arquivo."
-      );
+      terminalWrite(output, files.map(file => `${fileIcon(file)} ${file.name}`).join("\n") || "Nenhum arquivo.");
       break;
-
-    case "date":
-      terminalWrite(output, new Date().toLocaleString("pt-BR"));
-      break;
-
-    case "whoami":
-      terminalWrite(output, "usuario@retros");
-      break;
-
-    case "echo":
-      terminalWrite(output, rest);
-      break;
-
+    case "date": terminalWrite(output, new Date().toLocaleString("pt-BR")); break;
+    case "whoami": terminalWrite(output, "usuario@retros"); break;
+    case "echo": terminalWrite(output, rest); break;
     case "open": {
-      if (!rest) {
-        terminalWrite(output, "Uso: open NOME");
-        break;
-      }
-
+      if (!rest) { terminalWrite(output, "Uso: open NOME"); break; }
       const file = findFileByName(rest);
-
-      if (!file) {
-        terminalWrite(output, "Arquivo não encontrado: " + rest);
-      } else {
-        openFile(file.id);
-        terminalWrite(output, "Abrindo " + file.name + "...");
-      }
+      if (!file) terminalWrite(output, "Arquivo não encontrado: " + rest);
+      else { openFile(file.id); terminalWrite(output, "Abrindo " + file.name + "..."); }
       break;
     }
-
     case "run": {
-      if (!rest) {
-        terminalWrite(output, "Uso: run Misterio.exe");
-        break;
-      }
-
+      if (!rest) { terminalWrite(output, "Uso: run Misterio.exe"); break; }
       const file = findFileByName(rest);
-
-      if (!file || file.type !== "exe") {
-        terminalWrite(output, "Executável não encontrado.");
-      } else {
-        terminalWrite(output, "Executando " + file.name + "...");
-        openFile(file.id);
-      }
+      if (!file || file.type !== "exe") terminalWrite(output, "Executável não encontrado.");
+      else { terminalWrite(output, "Executando " + file.name + "..."); openFile(file.id); }
       break;
     }
-
-    case "misterio.exe":
-      runMystery();
-      terminalWrite(output, "Executando Misterio.exe...");
-      break;
-
+    case "misterio.exe": runMystery(); terminalWrite(output, "Executando Misterio.exe..."); break;
     case "cat": {
       const file = findFileByName(rest);
-
-      if (!file) {
-        terminalWrite(output, "Arquivo não encontrado.");
-      } else if (file.type === "txt") {
-        terminalWrite(output, file.content || "(arquivo vazio)");
-      } else {
-        terminalWrite(output, "Este arquivo não é um documento de texto.");
-      }
+      if (!file) terminalWrite(output, "Arquivo não encontrado.");
+      else if (file.type === "txt") terminalWrite(output, file.content || "(arquivo vazio)");
+      else terminalWrite(output, "Este arquivo não é um documento de texto.");
       break;
     }
-
     case "touch": {
-      if (!rest) {
-        terminalWrite(output, "Uso: touch Novo.txt");
-        break;
-      }
-
+      if (!rest) { terminalWrite(output, "Uso: touch Novo.txt"); break; }
       let name = rest;
       if (!name.toLowerCase().endsWith(".txt")) name += ".txt";
-
-      if (findFileByName(name)) {
-        terminalWrite(output, "Já existe um arquivo com esse nome.");
-        break;
-      }
-
+      if (findFileByName(name)) { terminalWrite(output, "Já existe um arquivo com esse nome."); break; }
       files.push({ id: makeId(), name, type: "txt", content: "" });
-      saveFiles();
-      renderDesktopIcons();
-      refreshOpenFileWindows();
-
+      saveFiles(); renderDesktopIcons(); refreshOpenFileWindows();
       terminalWrite(output, "Criado: " + name);
       break;
     }
-
-    case "create-app":
-      openApp("appbuilder");
-      terminalWrite(output, "Abrindo o criador de aplicativos...");
-      break;
-
+    case "create-app": openApp("appbuilder"); terminalWrite(output, "Abrindo o criador de aplicativos..."); break;
     case "calc":
-      try {
-        terminalWrite(output, calculateExpression(rest));
-      } catch (error) {
-        terminalWrite(output, "Erro: " + error.message);
-      }
+      try { terminalWrite(output, calculateExpression(rest)); }
+      catch (error) { terminalWrite(output, "Erro: " + error.message); }
       break;
-
     case "background":
       if (args[0]?.toLowerCase() === "reset") {
         setDefaultBackground(true);
         terminalWrite(output, "Papel de parede padrão restaurado.");
-      } else {
-        terminalWrite(output, "Use: background reset");
-      }
+      } else terminalWrite(output, "Use: background reset");
       break;
-
     case "apps": {
-      const appNames = files
-        .filter(file => file.type === "app")
-        .map(file => `${file.icon || "🧩"} ${file.name}`);
-
+      const appNames = files.filter(file => file.type === "app").map(file => `${file.icon || "🧩"} ${file.name}`);
       terminalWrite(output, appNames.join("\n") || "Nenhum aplicativo instalado.");
       break;
     }
-
     case "neofetch":
       terminalWrite(output, [
         "       .----.       RetrOS Web",
@@ -1131,21 +1030,16 @@ function runTerminalCommand(raw, output) {
         "      Bem-vindo ao RetrOS!"
       ].join("\n"));
       break;
-
-    case "about":
-      terminalWrite(output, "RetrOS Web 4.0 — sistema virtual com apps HTML/CSS/JS.");
-      break;
-
-    default:
-      terminalWrite(output, `Comando desconhecido: ${command}. Digite help.`);
+    case "about": terminalWrite(output, "RetrOS Web 4.0 — sistema virtual com apps HTML/CSS/JS."); break;
+    default: terminalWrite(output, `Comando desconhecido: ${command}. Digite help.`);
   }
 }
+```[cite: 1]
 
-// =============================================
-// EXECUTÁVEL MISTERIOSO
-// É uma simulação, não um .exe real.
-// =============================================
+---
 
+### 10. Executável Misterioso (Easter Egg) e Eventos Globais do Sistema
+```javascript
 function runMystery() {
   const id = createWindow("Misterio.exe", "👁️", `
     <div class="mystery-box">
@@ -1160,20 +1054,12 @@ function runMystery() {
   setTimeout(() => {
     if (entry && entry.element.isConnected) {
       const status = entry.element.querySelector(".mystery-status");
-
-      if (status) {
-        status.textContent =
-          "ACESSO CONCEDIDO.\nVOCÊ ENCONTROU O ARQUIVO.\n\n...\n\nCalma! 😈 Era só um easter egg do RetrOS.\nNenhum arquivo real foi executado ou alterado.";
-      }
+      if (status) status.textContent =
+        "ACESSO CONCEDIDO.\nVOCÊ ENCONTROU O ARQUIVO.\n\n...\n\nCalma! 😈 Era só um easter egg do RetrOS.\nNenhum arquivo real foi executado ou alterado.";
     }
-
     desktop.classList.remove("glitching");
   }, 1600);
 }
-
-// =============================================
-// EVENTOS GERAIS
-// =============================================
 
 document.getElementById("start-button").addEventListener("click", event => {
   event.stopPropagation();
@@ -1183,7 +1069,6 @@ document.getElementById("start-button").addEventListener("click", event => {
 
 document.addEventListener("click", event => {
   const button = event.target.closest("[data-action]");
-
   if (!button) {
     if (!event.target.closest("#start-menu")) startMenu.classList.add("hidden");
     if (!event.target.closest("#context-menu")) contextMenu.classList.add("hidden");
@@ -1197,195 +1082,91 @@ document.addEventListener("click", event => {
   const value = button.dataset.value;
 
   switch (action) {
-    case "open-app":
-      openApp(key);
-      break;
-
+    case "open-app": openApp(key); break;
     case "browser-quick": {
       const address = button.dataset.url;
-
-      if (address) {
-        window.open(address, "_blank", "noopener,noreferrer");
-      }
+      if (address) window.open(address, "_blank", "noopener,noreferrer");
       break;
     }
-
-    case "open-desktop":
-      if (fileId) openFile(fileId);
-      else openApp(key);
-      break;
-
-    case "open-file":
-      openFile(fileId);
-      break;
-
-    case "new-text":
-      newTextFile();
-      break;
-
-    case "rename-file":
-      renameFile(fileId);
-      break;
-
-    case "delete-file":
-      deleteFile(fileId);
-      break;
-
-    case "save-note":
-      saveNote(button);
-      break;
-
-    case "save-note-as":
-      saveNoteAs(button);
-      break;
-
-    case "save-app-content":
-      saveAppContent(button);
-      break;
-
-    case "run-app-code":
-      runAppPreview(button.closest(".app-editor"));
-      break;
-
+    case "open-desktop": if (fileId) openFile(fileId); else openApp(key); break;
+    case "open-file": openFile(fileId); break;
+    case "new-text": newTextFile(); break;
+    case "rename-file": renameFile(fileId); break;
+    case "delete-file": deleteFile(fileId); break;
+    case "save-note": saveNote(button); break;
+    case "save-note-as": saveNoteAs(button); break;
+    case "save-app-content": saveAppContent(button); break;
+    case "run-app-code": runAppPreview(button.closest(".app-editor")); break;
     case "reset-app-template": {
       const area = button.closest(".window")?.querySelector('textarea[name="appContent"]');
-
       if (area) area.value = appCodeTemplate;
       break;
     }
-
-    case "close-window":
-      closeWindow(id);
-      break;
-
-    case "minimize-window":
-      minimizeWindow(id);
-      break;
-
+    case "close-window": closeWindow(id); break;
+    case "minimize-window": minimizeWindow(id); break;
     case "maximize-window": {
       const entry = windows.get(id);
-
-      if (entry) {
-        entry.element.classList.toggle("maximized");
-        focusWindow(id);
-      }
+      if (entry) { entry.element.classList.toggle("maximized"); focusWindow(id); }
       break;
     }
-
-    case "toggle-window":
-      toggleWindow(id);
-      break;
-
-    case "calc-input":
-      handleCalculator(action, value, button);
-      break;
-
-    case "reset-background":
-      setDefaultBackground(true);
-      break;
-
+    case "toggle-window": toggleWindow(id); break;
+    case "calc-input": handleCalculator(action, value, button); break;
+    case "reset-background": setDefaultBackground(true); break;
     case "apply-background-color": {
       const color = button.closest(".window")?.querySelector(".bg-color")?.value;
-
       if (color) setBackgroundColor(color);
       break;
     }
-
-    case "refresh-desktop":
-      renderDesktopIcons();
-      refreshOpenFileWindows();
-      contextMenu.classList.add("hidden");
-      break;
+    case "refresh-desktop": renderDesktopIcons(); refreshOpenFileWindows(); contextMenu.classList.add("hidden"); break;
   }
 });
 
-// =============================================
-// IMPORTAR IMAGEM PARA O PAPEL DE PAREDE
-// =============================================
-
 document.addEventListener("change", event => {
   if (!event.target.matches(".bg-file")) return;
-
   const file = event.target.files?.[0];
   if (!file) return;
-
-  if (!file.type.startsWith("image/")) {
-    return alert("Escolha um arquivo de imagem.");
-  }
-
+  if (!file.type.startsWith("image/")) return alert("Escolha um arquivo de imagem.");
   const reader = new FileReader();
-
-  reader.onload = () => {
-    if (typeof reader.result === "string") {
-      setBackgroundImage(reader.result);
-    }
-  };
-
+  reader.onload = () => { if (typeof reader.result === "string") setBackgroundImage(reader.result); };
   reader.onerror = () => alert("Não foi possível ler essa imagem.");
   reader.readAsDataURL(file);
 });
 
-// =============================================
-// FORMULÁRIOS
-// =============================================
-
 document.addEventListener("submit", event => {
   const form = event.target;
-
   if (form.matches(".app-builder-form")) {
     event.preventDefault();
     createUserApp(form);
     return;
   }
-
   if (form.matches(".terminal-form")) {
     event.preventDefault();
-
     const input = form.elements.command;
     const command = input.value;
     input.value = "";
-
-    const output = form.closest(".terminal")?.querySelector("[data-terminal-output>");
-
+    const output = form.closest(".terminal")?.querySelector("[data-terminal-output]");
     if (output) runTerminalCommand(command, output);
-
     input.focus();
     return;
   }
-
-  // Pesquisa verdadeira no Google.
   if (form.matches(".browser-search-form")) {
     event.preventDefault();
-
     const query = form.elements.query.value.trim();
     if (!query) return;
-
-    const googleURL = "https://www.google.com/search?q=" +
-      encodeURIComponent(query);
-
-    window.open(googleURL, "_blank", "noopener,noreferrer");
+    window.open("https://www.google.com/search?q=" + encodeURIComponent(query), "_blank", "noopener,noreferrer");
     return;
   }
-
-  // Abrir endereços reais da internet.
   if (form.matches(".browser-url-form")) {
     event.preventDefault();
-
     let address = form.elements.url.value.trim();
     if (!address) return;
-
-    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(address)) {
-      address = "https://" + address;
-    }
-
+    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(address)) address = "https://" + address;
     try {
       const parsed = new URL(address);
-
       if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
         alert("Por segurança, use um endereço que comece com http:// ou https://");
         return;
       }
-
       window.open(parsed.href, "_blank", "noopener,noreferrer");
     } catch {
       alert("Esse endereço não parece válido.");
@@ -1393,25 +1174,17 @@ document.addEventListener("submit", event => {
   }
 });
 
-// =============================================
-// ARRASTAR JANELAS PELA BARRA DE TÍTULO
-// =============================================
-
 let dragState = null;
 
 windowLayer.addEventListener("pointerdown", event => {
   const titlebar = event.target.closest(".titlebar");
   const win = event.target.closest(".window");
-
   if (!win) return;
-
   focusWindow(win.dataset.windowId);
-
   if (!titlebar || event.target.closest("button")) return;
   if (win.classList.contains("maximized")) return;
 
   const rect = win.getBoundingClientRect();
-
   dragState = {
     win,
     pointerId: event.pointerId,
@@ -1420,72 +1193,38 @@ windowLayer.addEventListener("pointerdown", event => {
     left: rect.left,
     top: rect.top
   };
-
   titlebar.setPointerCapture(event.pointerId);
 });
 
 window.addEventListener("pointermove", event => {
   if (!dragState || event.pointerId !== dragState.pointerId) return;
-
   const { win, startX, startY, left, top } = dragState;
-
   const maxLeft = Math.max(0, window.innerWidth - win.offsetWidth);
   const maxTop = Math.max(0, window.innerHeight - 65);
-
-  win.style.left = Math.max(
-    0,
-    Math.min(maxLeft, left + event.clientX - startX)
-  ) + "px";
-
-  win.style.top = Math.max(
-    0,
-    Math.min(maxTop, top + event.clientY - startY)
-  ) + "px";
-
+  win.style.left = Math.max(0, Math.min(maxLeft, left + event.clientX - startX)) + "px";
+  win.style.top = Math.max(0, Math.min(maxTop, top + event.clientY - startY)) + "px";
   win.style.transform = "none";
 });
 
-window.addEventListener("pointerup", () => {
-  dragState = null;
-});
-
-window.addEventListener("pointercancel", () => {
-  dragState = null;
-});
-
-// =============================================
-// MENU DE CONTEXTO DO DESKTOP
-// =============================================
+window.addEventListener("pointerup", () => { dragState = null; });
+window.addEventListener("pointercancel", () => { dragState = null; });
 
 desktop.addEventListener("contextmenu", event => {
-  if (event.target.closest(".window") || event.target.closest(".taskbar")) {
-    return;
-  }
-
+  if (event.target.closest(".window") || event.target.closest(".taskbar")) return;
   event.preventDefault();
-
   contextMenu.classList.remove("hidden");
   startMenu.classList.add("hidden");
-
   const rect = desktop.getBoundingClientRect();
-
   const x = Math.min(event.clientX - rect.left, rect.width - 230);
   const y = Math.min(event.clientY - rect.top, rect.height - 200);
-
   contextMenu.style.left = Math.max(0, x) + "px";
   contextMenu.style.top = Math.max(0, y) + "px";
 });
 
-// =============================================
-// RELÓGIO DA BARRA DE TAREFAS
-// =============================================
-
 function updateClock() {
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+  document.getElementById("clock").textContent = new Date().toLocaleTimeString("pt-BR", {
+    hour: "2-digit", minute: "2-digit"
+  });
 }
 
 updateClock();
